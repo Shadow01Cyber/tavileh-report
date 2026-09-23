@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report — @tavileh_khodadoos</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#0d1117;color:#c9d1d9;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:16px;padding:40px;max-width:540px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.emoji{font-size:3em;margin-bottom:16px}
+h1{color:#f0883e;font-size:1.4em;margin-bottom:8px}
+p{color:#8b949e;margin:4px 0;font-size:0.95em}
+.info{color:#8b949e;margin:16px 0;font-size:0.85em;text-align:left;background:#0d1117;padding:12px;border-radius:8px}
+.cd{color:#58a6ff;font-size:1em;margin-top:14px;font-weight:600}
+.send{background:#f0883e;color:#0d1117;border:none;padding:16px 32px;border-radius:8px;font-size:1.1em;font-weight:600;cursor:pointer;margin-top:12px}
+.send:hover{background:#ff9d5c}
+.note{color:#8b949e;font-size:0.8em;margin-top:14px;line-height:1.5}
+</style></head>
+<body>
+<div class="card">
+<div class="emoji">🚫</div>
+<h1>Report — @tavileh_khodadoos</h1>
+<p>1 report &bull; opens a Gmail draft to abuse@telegram.org</p>
+<div class="info"><strong>channel:</strong> "طویله خدادوست" @tavileh_khodadoos (Chat ID -1003411816741) — publishing identities of women and dissidents</div>
+<div class="cd" id="cd">Opening in 5s</div>
+<button class="send" onclick="go()">Send now</button>
+<p class="note">A new tab opens with the full report pre-filled (to, subject, body). Review it, then click Send in Gmail. You are asked to sign in to Google if needed.</p>
+</div>
+<script>
+var r={"to": "abuse@telegram.org", "subject": "This Channel Is Getting People Arrested — Publishing Identities of Women and Dissidents — @tavileh_khodadoos (ID: -1003411816741)", "body": "Dear Telegram Team,\n\nThere is a channel on your platform that is not just publishing content — it is putting real people in prison.\n\nThe channel is called \"طویله خدادوست\" (@tavileh_khodadoos, Chat ID: -1003411816741). Its purpose is to expose the identities of women and people who oppose the Iranian government. It publishes their personal information, photos, and identities — and that information is then handed to the authorities.\n\nThe result: people are being arrested. Women are being jailed. Families are being destroyed — not because of anything they posted on Telegram, but because this channel published who they are.\n\nViolating content (verifiable links):\nhttps://t.me/tavileh_khodadoos/825\nhttps://t.me/tavileh_khodadoos/991\nhttps://t.me/tavileh_khodadoos/1016\nhttps://t.me/tavileh_khodadoos/1032\nhttps://t.me/tavileh_khodadoos/1043\nhttps://t.me/tavileh_khodadoos/1044\n\nWhat is actually happening here:\n\n1. Doxxing — Publishing identities, photos, and personal data of individuals without consent.\n2. Endangering lives — This is not just harassment. The information published by this channel is used to arrest, imprison, and harm real people.\n3. Targeting women and dissidents — The victims are specifically women and people who have spoken out against the government. They are targeted because of their gender and their beliefs.\n4. Real-world consequences — People are in prison right now because of this channel.\n5. A weapon, not a channel — This channel is not sharing news. It is gathering intelligence on innocent people and handing it over to be used against them.\n\nI am not asking for a review. I am asking you to stop this.\n\nRequested action:\n1. Permanently ban @tavileh_khodadoos (Chat ID: -1003411816741).\n2. Preserve all evidence for referral to international human rights organizations and law enforcement.\n3. Block the operators from creating new channels.\n\nEvery day this channel stays up, another person is exposed. Another name is added to a list that leads to a prison cell. You have the power to stop this. Please use it.\n\nThank you for your attention."};
+var fired=false;
+function go(){if(fired)return;fired=true;clearInterval(tmr);
+var b=r.body.replace(/\n/g,'\r\n');
+var u='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(r.to)+'&su='+encodeURIComponent(r.subject)+'&body='+encodeURIComponent(b);
+try{window.open(u,'_blank')}catch(e){var a=document.createElement('a');a.href=u;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a)}}
+var n=5;var cd=document.getElementById('cd');
+var tmr=setInterval(function(){n--;if(n<=0){go()}else{cd.textContent='Opening in '+n+'s'}},1000);
+</script>
+</body></html>
