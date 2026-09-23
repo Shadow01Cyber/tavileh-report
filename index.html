@@ -13,22 +13,24 @@ p{color:#8b949e;margin:4px 0;font-size:0.95em}
 .info{color:#8b949e;margin:16px 0;font-size:0.85em;text-align:left;background:#0d1117;padding:12px;border-radius:8px}
 .lbl{color:#f0883e;font-size:0.85em;margin:14px 0 6px;font-weight:600}
 select{width:100%;background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:8px;padding:10px;font-size:0.85em}
-.cd{color:#58a6ff;font-size:1em;margin-top:14px;font-weight:600}
+.cd{color:#58a6ff;font-size:1em;margin-top:16px;font-weight:600}
 .send{background:#f0883e;color:#0d1117;border:none;padding:16px 32px;border-radius:8px;font-size:1.1em;font-weight:600;cursor:pointer;margin-top:12px;width:100%}
 .send:hover{background:#ff9d5c}
+.send.pulse{animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(240,136,62,.6)}70%{box-shadow:0 0 0 14px rgba(240,136,62,0)}100%{box-shadow:0 0 0 0 rgba(240,136,62,0)}}
 .note{color:#8b949e;font-size:0.8em;margin-top:14px;line-height:1.5;text-align:left}
 </style></head>
 <body>
 <div class="card">
 <div class="emoji">🚫</div>
 <h1>Report — @tavileh_khodadoos</h1>
-<p>opens a Gmail draft to abuse@telegram.org &bull; 1 report</p>
+<p>opens a Gmail draft to abuse@telegram.org &bull; you review, then hit Send</p>
 <div class="info"><strong>channel:</strong> "طویله خدادوست" @tavileh_khodadoos (Chat ID -1003411816741) — publishing identities of women and dissidents</div>
-<div class="lbl">Choose a subject (15 options, all the same report body):</div>
+<div class="lbl">Choose a subject (15 options, same report body):</div>
 <select id="sub"></select>
 <div class="cd" id="cd">Opening in 5s</div>
-<button class="send" onclick="go()">Send now</button>
-<p class="note">Pick a subject, then a new tab opens with that subject + the full report pre-filled. Review it, then click Send in Gmail. You are asked to sign in to Google if needed. The body is identical for every subject — only the subject line changes.</p>
+<button class="send" id="btn" onclick="openGmail()">Open in Gmail &rarr;</button>
+<p class="note">Click "Open in Gmail" &rarr; a new tab opens with the subject + full report pre-filled &rarr; in Gmail just press Send. The body is identical for every subject; only the subject line changes. If you are not signed into Google, you will be asked to sign in first, then hit Send.</p>
 </div>
 <script>
 var subjects=["This Channel Is Getting People Arrested — Publishing Identities of Women and Dissidents — @tavileh_khodadoos (ID: -1003411816741)",
@@ -50,12 +52,29 @@ var body="Dear Telegram Team,\n\nThere is a channel on your platform that is not
 var TO='abuse@telegram.org';
 var sel=document.getElementById('sub');
 subjects.forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o)});
-var fired=false;
-function go(){if(fired)return;fired=true;clearInterval(tmr);
-var b=body.replace(/\n/g,'\r\n');
-var u='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(TO)+'&su='+encodeURIComponent(sel.value)+'&body='+encodeURIComponent(b);
-try{window.open(u,'_blank')}catch(e){var a=document.createElement('a');a.href=u;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a)}}
-var n=5;var cd=document.getElementById('cd');
-var tmr=setInterval(function(){n--;if(n<=0){go()}else{cd.textContent='Opening in '+n+'s'}},1000);
+var done=false;
+function buildUrl(){
+  var b=body.replace(/\n/g,'\r\n');
+  return 'https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(TO)+'&su='+encodeURIComponent(sel.value)+'&body='+encodeURIComponent(b);
+}
+function openGmail(){
+  if(done)return;done=true;clearInterval(tmr);document.getElementById('btn').classList.remove('pulse');
+  var u=buildUrl();
+  var w=window.open(u,'_blank');
+  if(!w){ /* popup blocked -> fall back to same-tab navigation so it still reaches Gmail */
+    try{window.location.href=u}catch(e){var a=document.createElement('a');a.href=u;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a)}
+  }
+}
+var n=5;var cd=document.getElementById('cd');var btn=document.getElementById('btn');
+var tmr=setInterval(function(){
+  n--;
+  if(n<=0){
+    cd.textContent='Ready — tap "Open in Gmail"';btn.classList.add('pulse');
+    // best-effort auto-open; if the browser blocks the non-gesture open, the pulsing button is the reliable path
+    openGmail();
+  }else{
+    cd.textContent='Opening in '+n+'s';
+  }
+},1000);
 </script>
 </body></html>
