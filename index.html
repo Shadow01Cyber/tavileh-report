@@ -19,18 +19,20 @@ select{width:100%;background:#0d1117;color:#c9d1d9;border:1px solid #30363d;bord
 .send.pulse{animation:pulse 1.2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(240,136,62,.6)}70%{box-shadow:0 0 0 14px rgba(240,136,62,0)}100%{box-shadow:0 0 0 0 rgba(240,136,62,0)}}
 .note{color:#8b949e;font-size:0.8em;margin-top:14px;line-height:1.5;text-align:left}
+.state{color:#58a6ff;font-size:0.9em;margin-top:10px;font-weight:600;min-height:1.2em}
 </style></head>
 <body>
 <div class="card">
 <div class="emoji">🚫</div>
 <h1>Report — @tavileh_khodadoos</h1>
-<p>opens a Gmail draft to abuse@telegram.org &bull; you review, then hit Send</p>
+<p>opens your email app &rarr; to, subject and body pre-filled &rarr; you just hit Send</p>
 <div class="info"><strong>channel:</strong> "طویله خدادوست" @tavileh_khodadoos (Chat ID -1003411816741) — publishing identities of women and dissidents</div>
-<div class="lbl">Choose a subject (15 options, same report body):</div>
+<div class="lbl">Subject (15 options, same report body):</div>
 <select id="sub"></select>
 <div class="cd" id="cd">Opening in 5s</div>
-<button class="send" id="btn" onclick="openGmail()">Open in Gmail &rarr;</button>
-<p class="note">Click "Open in Gmail" &rarr; a new tab opens with the subject + full report pre-filled &rarr; in Gmail just press Send. The body is identical for every subject; only the subject line changes. If you are not signed into Google, you will be asked to sign in first, then hit Send.</p>
+<button class="send" id="btn" onclick="sendReport()">Send report &rarr; opens email</button>
+<div class="state" id="state"></div>
+<p class="note">Press "Send report" &rarr; your email app opens with the subject + full report already filled in (to abuse@telegram.org). You only press Send. On iPhone the 5-second auto-open needs a tap on the button (iOS blocks auto-open); the button always works.</p>
 </div>
 <script>
 var subjects=["This Channel Is Getting People Arrested — Publishing Identities of Women and Dissidents — @tavileh_khodadoos (ID: -1003411816741)",
@@ -53,25 +55,22 @@ var TO='abuse@telegram.org';
 var sel=document.getElementById('sub');
 subjects.forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o)});
 var done=false;
-function buildUrl(){
+function buildMailto(){
   var b=body.replace(/\n/g,'\r\n');
-  return 'https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(TO)+'&su='+encodeURIComponent(sel.value)+'&body='+encodeURIComponent(b);
+  return 'mailto:'+TO+'?subject='+encodeURIComponent(sel.value)+'&body='+encodeURIComponent(b);
 }
-function openGmail(){
+function sendReport(){
+  var m=buildMailto();
+  try{window.location.href=m;}catch(e){var a=document.createElement('a');a.href=m;document.body.appendChild(a);a.click();document.body.removeChild(a);}
+  document.getElementById('state').textContent='Opening your email app…';
   if(done)return;done=true;clearInterval(tmr);document.getElementById('btn').classList.remove('pulse');
-  var u=buildUrl();
-  var w=window.open(u,'_blank');
-  if(!w){ /* popup blocked -> fall back to same-tab navigation so it still reaches Gmail */
-    try{window.location.href=u}catch(e){var a=document.createElement('a');a.href=u;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a)}
-  }
 }
 var n=5;var cd=document.getElementById('cd');var btn=document.getElementById('btn');
 var tmr=setInterval(function(){
   n--;
   if(n<=0){
-    cd.textContent='Ready — tap "Open in Gmail"';btn.classList.add('pulse');
-    // best-effort auto-open; if the browser blocks the non-gesture open, the pulsing button is the reliable path
-    openGmail();
+    cd.textContent='Ready';btn.classList.add('pulse');
+    sendReport(); // best-effort auto-open (same-tab mailto). iOS will need a tap; button is guaranteed.
   }else{
     cd.textContent='Opening in '+n+'s';
   }
